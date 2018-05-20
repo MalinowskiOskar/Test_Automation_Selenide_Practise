@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Website_Test">
+    <test name="All in one test" preserve-order="true">
+        <groups>
+            <run>
+                <include name="Website"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.Setup"/>
+            <class name="tests.Exercise1"/>
+            <class name="tests.Exercise2"/>
+        </classes>
+    </test>
+
+    <!--<parameter name="User" value="user@user.com"/>-->
+</suite>
