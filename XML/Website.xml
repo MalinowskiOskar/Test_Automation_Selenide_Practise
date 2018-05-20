@@ -12,6 +12,4 @@
             <class name="tests.Exercise2"/>
         </classes>
     </test>
-
-    <!--<parameter name="User" value="user@user.com"/>-->
 </suite>

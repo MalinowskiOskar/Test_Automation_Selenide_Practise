@@ -2,6 +2,7 @@ package tests;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+<<<<<<< HEAD
 import org.testng.annotations.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -10,6 +11,16 @@ import org.openqa.selenium.Cookie;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
+=======
+import org.openqa.selenium.Cookie;
+import org.testng.annotations.Test;
+import java.io.IOException;
+import java.util.Set;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static junit.framework.TestCase.assertTrue;
+>>>>>>> towebsite
 import static org.junit.Assume.assumeFalse;
 
 public class Exercise2 extends Setup {
@@ -42,7 +53,19 @@ public class Exercise2 extends Setup {
         $(".example > p:nth-child(2)").shouldHave(text("Congratulations! You must have the proper credentials."));
     }
 
+<<<<<<< HEAD
     @Test(groups = "Website", priority = 3)
+=======
+        @Test(groups = "Website", priority = 3)
+    public void BrokenImages() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[3]/a")).click();
+        assertTrue("Broken image1", $(By.xpath("/html/body/div[2]/div/div/img[1]")).isImage()); // fail
+        assertTrue("Broken image2", $(By.xpath("/html/body/div[2]/div/div/img[2]")).isImage()); // fail
+        assertTrue("Broken image3", $(By.xpath("/html/body/div[2]/div/div/img[3]")).isImage()); // pass
+    }
+    @Test(groups = "Website", priority = 4)
+>>>>>>> towebsite
     public void ChallengingDom() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[4]/a")).click();
@@ -53,7 +76,7 @@ public class Exercise2 extends Setup {
         $$(By.xpath("/html/body/div[2]/div/div/div/div/div[2]/table/tbody/tr")).findBy(text("Consequuntur9")).find(By.linkText("delete")).click();
     }
 
-    @Test(groups = "Website", priority = 4)
+    @Test(groups = "Website", priority = 5)
     public void CheckBoxes() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[5]/a")).click();
@@ -65,7 +88,11 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"checkboxes\"]/input[2]")).shouldNotBe(checked);
     }
 
+<<<<<<< HEAD
     @Test(groups = "Website", priority = 5)
+=======
+    @Test(groups = "Website", priority = 6)
+>>>>>>> towebsite
     public void DisappearingElements() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[7]/a")).click();
@@ -76,7 +103,11 @@ public class Exercise2 extends Setup {
         }
     }
 
+<<<<<<< HEAD
     @Test(groups = "Website", priority = 6)
+=======
+    @Test(groups = "Website", priority = 7)
+>>>>>>> towebsite
     public void DynamicLoadingElementIsHidden() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[12]/a")).click();
@@ -84,6 +115,7 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"finish\"]/h4")).shouldBe(hidden);
         $(By.xpath("//*[@id=\"start\"]/button")).click();
         $(By.id("loading")).shouldBe(visible);
+<<<<<<< HEAD
         try {
             sleep(5500);
         } catch (InterruptedException e) {
@@ -92,24 +124,32 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"finish\"]/h4")).shouldBe(visible);
     }
     @Test(groups = "Website", priority = 7)
+=======
+        $(By.xpath("//*[@id=\"finish\"]/h4")).waitUntil(visible, 5000);
+    }
+    @Test(groups = "Website", priority = 8)
+>>>>>>> towebsite
     public void DynamicLoadingElementRenderedAfterTheFact() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[12]/a")).click();
         $(By.xpath("//*[@id=\"content\"]/div/a[2]")).click();
         $(By.xpath("//*[@id=\"finish\"]/h4")).shouldNot(exist);
         $(By.xpath("//*[@id=\"start\"]/button")).click();
-        try {
-            sleep(5500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        $(By.xpath("//*[@id=\"finish\"]/h4")).shouldBe(visible);
+        $(By.xpath("//*[@id=\"finish\"]/h4")).waitUntil(visible, 5000);
     }
+<<<<<<< HEAD
     @Test(groups = "Website", priority = 8)
     public void ExitIntent() {
+=======
+    @Test(groups = "Website", priority = 9)
+    public void ExitIntent() throws IOException {
+>>>>>>> towebsite
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[13]/a")).click();
-
+        Runtime.getRuntime().exec("C:\\Users\\nebre\\Testy_Automatyczne\\AutoIT\\mousemove.exe");
+        $(By.xpath("//*[@id=\"ouibounce-modal\"]/div[2]/div[2]/p")).shouldBe(visible);
+        $(By.xpath("//*[@id=\"ouibounce-modal\"]/div[2]/div[2]/p")).shouldHave(text("It's commonly used to encourage a user to take an action (e.g., give their e-mail address to sign up for something)."));
+        $(By.xpath("//*[@id=\"ouibounce-modal\"]/div[2]/div[3]/p")).shouldHave(text("Close")).click();
     }
 }
 
