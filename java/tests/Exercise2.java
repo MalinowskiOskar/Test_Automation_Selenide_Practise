@@ -2,18 +2,22 @@ package tests;
 
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
 import org.testng.annotations.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
+
+import static com.codeborne.selenide.WebDriverRunner.source;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeFalse;
 
 public class Exercise2 extends Setup {
@@ -234,6 +238,99 @@ public class Exercise2 extends Setup {
         messege.waitUntil(visible,5000).shouldHave(text("You logged into a secure area!"));
         logoutbutton.click();
         messege.waitUntil(visible,5000).shouldHave(text("You logged out of the secure area!"));
+    }
+
+    @Test(groups = "Website", priority = 18)
+    public void NestedFrames() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[19]/a")).click();
+        SelenideElement link = $(By.xpath("//*[@id=\"content\"]/div/ul/li[1]/a"));
+        link.click();
+
+        switchTo().frame("frame-top");
+        switchTo().frame("frame-left");
+        assertThat(source(), containsString("LEFT"));
+
+        switchTo().defaultContent();
+        switchTo().frame("frame-top");
+        switchTo().frame("frame-middle");
+        assertThat(source(), containsString("MIDDLE"));
+
+        switchTo().defaultContent();
+        switchTo().frame("frame-top");
+        switchTo().frame("frame-right");
+        assertThat(source(), containsString("RIGHT"));
+
+        switchTo().defaultContent();
+        switchTo().frame("frame-bottom");
+        assertThat(source(), containsString("BOTTOM"));
+    }
+
+    @Test(groups = "Website", priority = 19)
+    public void iFrame() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[19]/a")).click();
+        SelenideElement link = $(By.xpath("//*[@id=\"content\"]/div/ul/li[2]/a"));
+        link.click();
+
+        switchTo().frame("mce_0_ifr");
+        SelenideElement editor = $("#tinymce");
+        String before_text = editor.text();
+        editor.clear();
+        editor.setValue("Hello World!");
+        String after_text = editor.text();
+        Assert.assertNotEquals(after_text,before_text);
+        System.out.println(before_text);
+        System.out.println(after_text);
+    }
+
+    @Test(groups = "Website", priority = 20)
+    public void HorizontalSlider() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[21]/a")).click();
+        SelenideElement slider = $(By.xpath("//*[@id=\"content\"]/div/div/input"));
+        SelenideElement range = $("#range");
+        range.shouldHave(text("0"));
+        slider.sendKeys(Keys.ARROW_RIGHT);
+        range.shouldHave(text("0.5"));
+        slider.sendKeys(Keys.ARROW_RIGHT);
+        range.shouldHave(text("1"));
+    }
+
+    @Test(groups = "Website", priority = 21)
+    public void Hovers() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[22]/a")).click();
+        SelenideElement user1 = $("#content > div > div:nth-child(3) > img");
+        SelenideElement user1text = $(By.xpath("//*[@id=\"content\"]/div/div[1]/div/h5"));
+        SelenideElement user2 = $("#content > div > div:nth-child(4) > img");
+        SelenideElement user2text = $(By.xpath("//*[@id=\"content\"]/div/div[2]/div/h5"));
+        SelenideElement user3 = $("#content > div > div:nth-child(5) > img");
+        SelenideElement user3text = $(By.xpath("//*[@id=\"content\"]/div/div[3]/div/h5"));
+        user1.hover();
+        user1text.waitUntil(appear,5000).shouldHave(text("name: user1"));
+        user2.hover();
+        user2text.waitUntil(appear,5000).shouldHave(text("name: user2"));
+        user3.hover();
+        user3text.waitUntil(appear,5000).shouldHave(text("name: user3"));
+    }
+    @Test(groups = "Website", priority = 22)
+    public void InfiniteScroll() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[23]/a")).click();
+        SelenideElement page_footer = $("#page-footer");
+        SelenideElement element1page = $(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]"));
+        SelenideElement element2page = $(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[4]"));
+        sleep(1000);
+        element1page.waitUntil(visible,5000);
+        element2page.shouldNot(exist);
+        int elementPosition = page_footer.getLocation().getY();
+        String js = String.format("window.scrollTo(0, 5000)", elementPosition);
+        JavascriptExecutor jsx = (JavascriptExecutor) getWebDriver();
+        jsx.executeScript(js, "");
+        element2page.waitUntil(visible,5000);
+        element2page.shouldBe(visible);
+        sleep(1000);
     }
 }
 
