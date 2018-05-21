@@ -1,10 +1,7 @@
 package tests;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.testng.annotations.Test;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -35,6 +32,7 @@ public class Exercise1 extends Setup {
         $(byTitle("Printed Chiffon Dress")).scrollTo().click();
         // Exercise 1 Complete :)
     }
+
     @Test(groups = "Website", priority = 2)
     public void HoverAndCheckThatTextInImageIsCorrect() {
         open("http://automationpractice.com/index.php");
@@ -42,6 +40,7 @@ public class Exercise1 extends Setup {
         $(byTitle("Evening Dresses")).should(appear).click();
         $(".category-name").shouldHave(exactText("Evening Dresses")).shouldNotHave(text("Casual Dresses"));
     }
+
     @Test(groups = "Website", priority = 3)
     public void ElementsCollectionExercise(){
         open("http://automationpractice.com/index.php");
@@ -52,6 +51,7 @@ public class Exercise1 extends Setup {
 //        collection.shouldHaveSize(4);
         $$(".color_pick").shouldHaveSize(4);
     }
+
     @Test(groups = "Website", priority = 4)
     public void CorrectSignIn(){
         open("http://automationpractice.com/index.php");
@@ -81,5 +81,4 @@ public class Exercise1 extends Setup {
         $(By.id("alias")).setValue("TestAutomatyczny");
         $(By.id("submitAccount")).click();
     }
-
 }
