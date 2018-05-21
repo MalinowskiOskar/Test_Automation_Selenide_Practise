@@ -176,7 +176,7 @@ public class Exercise2 extends Setup {
         SelenideElement fileupload = $("#file-upload");
         SelenideElement filesubmit = $("#file-submit");
         SelenideElement uploadedfile = $("#uploaded-files");
-        File file = $(fileupload).uploadFile(new File("C:\\Users\\nebre\\OneDrive\\Pulpit\\AutoIt\\UploadFileTest.txt"));
+        File file = $(fileupload).uploadFile(new File("C:\\Users\\nebre\\Testy_Automatyczne\\files\\UploadFileTest.txt"));
         Assert.assertTrue(file.exists());
         filesubmit.click();
         uploadedfile.waitUntil(visible,5000).shouldHave(text("UploadFileTest.txt "));
