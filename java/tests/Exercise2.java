@@ -1,5 +1,6 @@
 package tests;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -328,7 +329,6 @@ public class Exercise2 extends Setup {
         user3.hover();
         user3text.waitUntil(appear,5000).shouldHave(text("name: user3"));
     }
-    
     @Test(groups = "Website", priority = 22)
     public void InfiniteScroll() {
         open("http://the-internet.herokuapp.com/");
@@ -347,7 +347,6 @@ public class Exercise2 extends Setup {
         element2page.shouldBe(visible);
         sleep(1000);
     }
-
     @Test(groups = "Website", priority = 23)
     public void JQueryUIMenu() throws FileNotFoundException {
         open("http://the-internet.herokuapp.com/");
@@ -392,6 +391,31 @@ public class Exercise2 extends Setup {
         switchTo().alert().sendKeys("Hello World!");
         switchTo().alert().accept();
         result.shouldHave(text("You entered: Hello World!"));
+    }
+    @Test(groups = "Website", priority = 25)
+    public void KeyPresses() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[27]/a")).click();
+        SelenideElement result = $("#result");
+        actions().sendKeys(Keys.TAB).perform();
+        result.shouldHave(text("You entered: TAB"));
+        actions().sendKeys(Keys.ENTER).perform();
+        result.shouldHave(text("You entered: ENTER"));
+        actions().sendKeys(Keys.SPACE).perform();
+        result.shouldHave(text("You entered: SPACE"));
+        actions().sendKeys("a").perform();
+        result.shouldHave(text("You entered: A"));
+        sleep(1000);
+    }
+    @Test(groups = "Website", priority = 26)
+    public void MultipleWindows() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[29]/a")).click();
+        SelenideElement link = $(By.xpath("//*[@id=\"content\"]/div/a"));
+        link.click();
+        switchTo().window("New Window").close();
+        switchTo().window("The Internet");
+        link.shouldBe(visible);
     }
 }
 
