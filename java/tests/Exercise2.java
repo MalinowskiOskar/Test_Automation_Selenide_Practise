@@ -3,6 +3,7 @@ package tests;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
+import org.junit.ComparisonFailure;
 import org.openqa.selenium.*;
 import org.testng.annotations.Test;
 import static com.codeborne.selenide.Condition.*;
@@ -69,7 +70,7 @@ public class Exercise2 extends Setup {
             assertTrue("Broken image2", $(By.xpath("/html/body/div[2]/div/div/img[2]")).isImage()); // fail
         }
         catch (AssertionError ex) {
-            System.out.println("Image2 broken. Continuing test");
+            System.out.println("Image2 broken. Continue testing");
         }
         assertTrue("Broken image3", $(By.xpath("/html/body/div[2]/div/div/img[3]")).isImage()); // pass
     }
@@ -119,6 +120,24 @@ public class Exercise2 extends Setup {
         }
     }
 
+//    @Test(groups = "Website", priority = 7)
+//    public void DragAndDrop()  {
+//        open("http://the-internet.herokuapp.com/");
+//        $(By.xpath("//*[@id=\"content\"]/ul/li[8]/a")).click();
+//        SelenideElement columA = $("#column-b");
+//        SelenideElement columB = $("#column-a");
+//        File dnd = new File("C:\\Users\\nebre\\Testy_Automatyczne\\Script\\drag_and_drop_helper.js");
+////        executeJavaScript(dnd+"$('#column-a').simulateDragDrop({ dropTarget: '#column-b'});");
+////        executeJavaScript (dnd+"$('#"+columA+"').simulateDragDrop( dropTarget: '#" +columB+ "');") ;
+////        var jsFile = File.ReadAllText(@"C:\Automated_Testing\drag_and_drop_helper.js");
+////        IJavaScriptExecutor js = _driver as IJavaScriptExecutor;
+////        //Execute java script - #{{id value}}
+////        js.ExecuteScript(jsFile + "$('#column-a').simulateDragDrop({ dropTarget: '#column-b'});");
+//
+////        executeJavaScript(dnd + "$('#column-b').simulateDragDrop({ dropTarget: '#column-a'});");
+//        sleep(2000);
+//    }
+
     @Test(groups = "Website", priority = 8)
     public void DropdownList() {
         open("http://the-internet.herokuapp.com/");
@@ -128,6 +147,58 @@ public class Exercise2 extends Setup {
         droplist.shouldHave(text("Option 1"));
         droplist.selectOption("Option 2");
         droplist.shouldHave(text("Option 2"));
+    }
+
+    @Test(groups = "Website", priority = 9)
+    public void DynamicContent() {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[10]/a")).click();
+        SelenideElement image1 = $(By.xpath("//*[@id=\"content\"]/div[1]/div[1]/img"));
+        SelenideElement image2 = $(By.xpath("//*[@id=\"content\"]/div[2]/div[1]/img"));
+        SelenideElement image3 = $(By.xpath("//*[@id=\"content\"]/div[3]/div[1]/img"));
+        String src1 = image1.getAttribute("src");
+        String src2 = image2.getAttribute("src");
+        String src3 = image3.getAttribute("src");
+
+        try {
+            Assert.assertEquals(src1,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image1. Continue testing.");
+        }
+        try {
+            Assert.assertEquals(src2,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image2. Continue testing.");
+        }
+        try {
+            Assert.assertEquals(src3,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image3. Continue testing.");
+        }
+
+        open("http://the-internet.herokuapp.com/dynamic_content?with_content=static");
+
+        try {
+            Assert.assertEquals(src1,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image1 with static content. Continue testing.");
+        }
+        try {
+            Assert.assertEquals(src2,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image2 with static content. Continue testing.");
+        }
+        try {
+            Assert.assertEquals(src3,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
+        }
+        catch (ComparisonFailure ex) {
+            System.out.println("Incorrect image3 with static content. Continue testing.");
+        }
     }
 
     @Test(groups = "Website", priority = 9)
