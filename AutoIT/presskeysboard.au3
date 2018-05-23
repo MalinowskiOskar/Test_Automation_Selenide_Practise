@@ -1,0 +1,6 @@
+Send("{DOWN}")
+Send("{DOWN}")
+Send("{DOWN}")
+Send("{DOWN}")
+Send("{DOWN}")
+Send("{ENTER}")

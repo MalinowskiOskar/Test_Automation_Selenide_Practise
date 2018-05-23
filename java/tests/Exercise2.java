@@ -250,7 +250,7 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"ouibounce-modal\"]/div[2]/div[3]/p")).shouldHave(text("Close")).click();
     }
 
-    @Test(groups = "Website", priority = 13)
+    @Test(groups = "Website", priority = 14)
     public void FileDownload() throws FileNotFoundException {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[14]/a")).click();
@@ -259,7 +259,7 @@ public class Exercise2 extends Setup {
         file.download();
     }
 
-    @Test(groups = "Website", priority = 14)
+    @Test(groups = "Website", priority = 13)
     public void FileUpload(){
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[15]/a")).click();
