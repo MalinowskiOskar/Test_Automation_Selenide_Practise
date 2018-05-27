@@ -1,6 +1,5 @@
 package tests;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
@@ -11,16 +10,18 @@ import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import org.openqa.selenium.JavascriptExecutor;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
+import java.io.*;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 import static com.codeborne.selenide.WebDriverRunner.source;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeFalse;
+import static org.openqa.selenium.logging.LogType.BROWSER;
 
 public class Exercise2 extends Setup {
 
@@ -56,20 +57,16 @@ public class Exercise2 extends Setup {
     public void BrokenImages() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[3]/a")).click();
-//        assertTrue("Broken image1", $(By.xpath("/html/body/div[2]/div/div/img[1]")).isImage()); // fail
-//        assertTrue("Broken image2", $(By.xpath("/html/body/div[2]/div/div/img[2]")).isImage()); // fail
-//        assertTrue("Broken image3", $(By.xpath("/html/body/div[2]/div/div/img[3]")).isImage()); // pass
+
         try {
             assertTrue("Broken image1", $(By.xpath("/html/body/div[2]/div/div/img[1]")).isImage()); // fail
-        }
-        catch (AssertionError ex) {
+        } catch (AssertionError ex) {
             System.out.println("Image1 broken. Continuing test");
         }
 
         try {
             assertTrue("Broken image2", $(By.xpath("/html/body/div[2]/div/div/img[2]")).isImage()); // fail
-        }
-        catch (AssertionError ex) {
+        } catch (AssertionError ex) {
             System.out.println("Image2 broken. Continue testing");
         }
         assertTrue("Broken image3", $(By.xpath("/html/body/div[2]/div/div/img[3]")).isImage()); // pass
@@ -120,25 +117,22 @@ public class Exercise2 extends Setup {
         }
     }
 
-//    @Test(groups = "Website", priority = 7)
-//    public void DragAndDrop()  {
-//        open("http://the-internet.herokuapp.com/");
-//        $(By.xpath("//*[@id=\"content\"]/ul/li[8]/a")).click();
-//        SelenideElement columA = $("#column-b");
-//        SelenideElement columB = $("#column-a");
-//        File dnd = new File("C:\\Users\\nebre\\Testy_Automatyczne\\Script\\drag_and_drop_helper.js");
-////        executeJavaScript(dnd+"$('#column-a').simulateDragDrop({ dropTarget: '#column-b'});");
-////        executeJavaScript (dnd+"$('#"+columA+"').simulateDragDrop( dropTarget: '#" +columB+ "');") ;
-////        var jsFile = File.ReadAllText(@"C:\Automated_Testing\drag_and_drop_helper.js");
-////        IJavaScriptExecutor js = _driver as IJavaScriptExecutor;
-////        //Execute java script - #{{id value}}
-////        js.ExecuteScript(jsFile + "$('#column-a').simulateDragDrop({ dropTarget: '#column-b'});");
-//
-////        executeJavaScript(dnd + "$('#column-b').simulateDragDrop({ dropTarget: '#column-a'});");
-//        sleep(2000);
-//    }
-
     @Test(groups = "Website", priority = 8)
+    public void DragAndDrop() {
+        /**
+         * http://the-internet.herokuapp.com/drag_and_drop
+         * not work correctly on html5, looking for solution
+         */
+        open("http://jqueryui.com/droppable/");
+        SelenideElement columA = $("#draggable");
+        SelenideElement columB = $("#droppable");
+        switchTo().frame(0);
+        actions().dragAndDrop(columA,columB).build().perform();
+//        actions().clickAndHold(columA).moveToElement(columB).release(columB).build().perform();
+    }
+
+
+    @Test(groups = "Website", priority = 9)
     public void DropdownList() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[9]/a")).click();
@@ -149,7 +143,7 @@ public class Exercise2 extends Setup {
         droplist.shouldHave(text("Option 2"));
     }
 
-    @Test(groups = "Website", priority = 9)
+    @Test(groups = "Website", priority = 10)
     public void DynamicContent() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[10]/a")).click();
@@ -161,47 +155,41 @@ public class Exercise2 extends Setup {
         String src3 = image3.getAttribute("src");
 
         try {
-            Assert.assertEquals(src1,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src1, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image1. Continue testing.");
         }
         try {
-            Assert.assertEquals(src2,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src2, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image2. Continue testing.");
         }
         try {
-            Assert.assertEquals(src3,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src3, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image3. Continue testing.");
         }
 
         open("http://the-internet.herokuapp.com/dynamic_content?with_content=static");
 
         try {
-            Assert.assertEquals(src1,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src1, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-2.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image1 with static content. Continue testing.");
         }
         try {
-            Assert.assertEquals(src2,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src2, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-6.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image2 with static content. Continue testing.");
         }
         try {
-            Assert.assertEquals(src3,"http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
-        }
-        catch (ComparisonFailure ex) {
+            Assert.assertEquals(src3, "http://the-internet.herokuapp.com/img/avatars/Original-Facebook-Geek-Profile-Avatar-5.jpg");
+        } catch (ComparisonFailure ex) {
             System.out.println("Incorrect image3 with static content. Continue testing.");
         }
     }
 
-    @Test(groups = "Website", priority = 9)
+    @Test(groups = "Website", priority = 11)
     public void Dynamic_Controls() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[11]/a")).click();
@@ -211,14 +199,14 @@ public class Exercise2 extends Setup {
         SelenideElement message = $("#message");
         checkbox.shouldNotBe(checked);
         button.click();
-        message.waitUntil(visible,5000).shouldHave(text("It's gone!"));
+        message.waitUntil(visible, 5000).shouldHave(text("It's gone!"));
         checkbox.shouldNotBe(visible);
         button.click();
-        checkbox.waitUntil(visible,5000);
-        message.waitUntil(visible,5000).shouldHave(text("It's back!"));
+        checkbox.waitUntil(visible, 5000);
+        message.waitUntil(visible, 5000).shouldHave(text("It's back!"));
     }
 
-    @Test(groups = "Website", priority = 10)
+    @Test(groups = "Website", priority = 12)
 
     public void DynamicLoadingElementIsHidden() {
         open("http://the-internet.herokuapp.com/");
@@ -230,7 +218,7 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"finish\"]/h4")).waitUntil(visible, 5000);
     }
 
-    @Test(groups = "Website", priority = 11)
+    @Test(groups = "Website", priority = 13)
     public void DynamicLoadingElementRenderedAfterTheFact() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[12]/a")).click();
@@ -240,7 +228,7 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"finish\"]/h4")).waitUntil(visible, 5000);
     }
 
-    @Test(groups = "Website", priority = 12)
+    @Test(groups = "Website", priority = 14)
     public void ExitIntent() throws IOException {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[13]/a")).click();
@@ -250,17 +238,8 @@ public class Exercise2 extends Setup {
         $(By.xpath("//*[@id=\"ouibounce-modal\"]/div[2]/div[3]/p")).shouldHave(text("Close")).click();
     }
 
-    @Test(groups = "Website", priority = 14)
-    public void FileDownload() throws FileNotFoundException {
-        open("http://the-internet.herokuapp.com/");
-        $(By.xpath("//*[@id=\"content\"]/ul/li[14]/a")).click();
-        SelenideElement file = $(withText("UploadFileTest.txt"));
-        file.shouldHave(text("UploadFileTest.txt"));
-        file.download();
-    }
-
-    @Test(groups = "Website", priority = 13)
-    public void FileUpload(){
+    @Test(groups = "Website", priority = 15)
+    public void FileUpload() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[15]/a")).click();
         SelenideElement fileupload = $("#file-upload");
@@ -269,10 +248,19 @@ public class Exercise2 extends Setup {
         File file = $(fileupload).uploadFile(new File("C:\\Users\\nebre\\Testy_Automatyczne\\files\\UploadFileTest.txt"));
         Assert.assertTrue(file.exists());
         filesubmit.click();
-        uploadedfile.waitUntil(visible,5000).shouldHave(text("UploadFileTest.txt"));
+        uploadedfile.waitUntil(visible, 5000).shouldHave(text("UploadFileTest.txt"));
     }
 
-    @Test(groups = "Website", priority = 15)
+    @Test(groups = "Website", priority = 16)
+    public void FileDownload() throws FileNotFoundException {
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[14]/a")).click();
+        SelenideElement file = $(withText("UploadFileTest.txt"));
+        file.shouldHave(text("UploadFileTest.txt"));
+        file.download();
+    }
+
+    @Test(groups = "Website", priority = 17)
     public void FloatingMenu() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[16]/a")).click();
@@ -283,7 +271,7 @@ public class Exercise2 extends Setup {
         menu.shouldBe(visible);
     }
 
-    @Test(groups = "Website", priority = 16)
+    @Test(groups = "Website", priority = 18)
     public void ForgotPassword() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[17]/a")).click();
@@ -295,10 +283,10 @@ public class Exercise2 extends Setup {
         submitbutton.click();
         content.shouldHave(text("Your e-mail's been sent!"));
         open("https://www.mailinator.com/v2/inbox.jsp?zone=public&query=testowanie_automatyczne#/#inboxpane");
-        resetmail.waitUntil(visible,5000);
+        resetmail.waitUntil(visible, 5000);
     }
 
-    @Test(groups = "Website", priority = 17)
+    @Test(groups = "Website", priority = 19)
     public void FormAuthentication() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[18]/a")).click();
@@ -311,22 +299,22 @@ public class Exercise2 extends Setup {
         username.setValue("");
         password.setValue("");
         button.click();
-        messege.waitUntil(visible,5000).shouldHave(text("Your username is invalid!"));
+        messege.waitUntil(visible, 5000).shouldHave(text("Your username is invalid!"));
 
         username.setValue("tomsmith");
         password.setValue("");
         button.click();
-        messege.waitUntil(visible,5000).shouldHave(text("Your password is invalid!"));
+        messege.waitUntil(visible, 5000).shouldHave(text("Your password is invalid!"));
 
         username.setValue("tomsmith");
         password.setValue("SuperSecretPassword!");
         button.click();
-        messege.waitUntil(visible,5000).shouldHave(text("You logged into a secure area!"));
+        messege.waitUntil(visible, 5000).shouldHave(text("You logged into a secure area!"));
         logoutbutton.click();
-        messege.waitUntil(visible,5000).shouldHave(text("You logged out of the secure area!"));
+        messege.waitUntil(visible, 5000).shouldHave(text("You logged out of the secure area!"));
     }
 
-    @Test(groups = "Website", priority = 18)
+    @Test(groups = "Website", priority = 20)
     public void NestedFrames() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[19]/a")).click();
@@ -352,7 +340,7 @@ public class Exercise2 extends Setup {
         assertThat(source(), containsString("BOTTOM"));
     }
 
-    @Test(groups = "Website", priority = 19)
+    @Test(groups = "Website", priority = 21)
     public void iFrame() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[19]/a")).click();
@@ -365,12 +353,12 @@ public class Exercise2 extends Setup {
         editor.clear();
         editor.setValue("Hello World!");
         String after_text = editor.text();
-        Assert.assertNotEquals(after_text,before_text);
+        Assert.assertNotEquals(after_text, before_text);
         System.out.println(before_text);
         System.out.println(after_text);
     }
 
-    @Test(groups = "Website", priority = 20)
+    @Test(groups = "Website", priority = 22)
     public void HorizontalSlider() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[21]/a")).click();
@@ -383,7 +371,7 @@ public class Exercise2 extends Setup {
         range.shouldHave(text("1"));
     }
 
-    @Test(groups = "Website", priority = 21)
+    @Test(groups = "Website", priority = 23)
     public void Hovers() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[22]/a")).click();
@@ -394,13 +382,14 @@ public class Exercise2 extends Setup {
         SelenideElement user3 = $("#content > div > div:nth-child(5) > img");
         SelenideElement user3text = $(By.xpath("//*[@id=\"content\"]/div/div[3]/div/h5"));
         user1.hover();
-        user1text.waitUntil(appear,5000).shouldHave(text("name: user1"));
+        user1text.waitUntil(appear, 5000).shouldHave(text("name: user1"));
         user2.hover();
-        user2text.waitUntil(appear,5000).shouldHave(text("name: user2"));
+        user2text.waitUntil(appear, 5000).shouldHave(text("name: user2"));
         user3.hover();
-        user3text.waitUntil(appear,5000).shouldHave(text("name: user3"));
+        user3text.waitUntil(appear, 5000).shouldHave(text("name: user3"));
     }
-    @Test(groups = "Website", priority = 22)
+
+    @Test(groups = "Website", priority = 24)
     public void InfiniteScroll() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[23]/a")).click();
@@ -408,17 +397,18 @@ public class Exercise2 extends Setup {
         SelenideElement element1page = $(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]"));
         SelenideElement element2page = $(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[4]"));
         sleep(1000);
-        element1page.waitUntil(visible,5000);
+        element1page.waitUntil(visible, 5000);
         element2page.shouldNot(exist);
         int elementPosition = page_footer.getLocation().getY();
         String js = String.format("window.scrollTo(0, 5000)", elementPosition);
         JavascriptExecutor jsx = (JavascriptExecutor) getWebDriver();
         jsx.executeScript(js, "");
-        element2page.waitUntil(visible,5000);
+        element2page.waitUntil(visible, 5000);
         element2page.shouldBe(visible);
         sleep(1000);
     }
-    @Test(groups = "Website", priority = 23)
+
+    @Test(groups = "Website", priority = 25)
     public void JQueryUIMenu() throws FileNotFoundException {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[24]/a")).click();
@@ -431,13 +421,13 @@ public class Exercise2 extends Setup {
         disabled.hover();
         download.shouldNot(visible);
         enabled.hover();
-        download.waitUntil(visible,5000).hover();
-        pdf.waitUntil(visible,5000).download();
-        csv.waitUntil(visible,5000).download();
-        excel.waitUntil(visible,5000).download();
+        download.waitUntil(visible, 5000).hover();
+        pdf.waitUntil(visible, 5000).download();
+        csv.waitUntil(visible, 5000).download();
+        excel.waitUntil(visible, 5000).download();
     }
 
-    @Test(groups = "Website", priority = 24)
+    @Test(groups = "Website", priority = 26)
     public void JavaScriptAlerts() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[25]/a")).click();
@@ -463,7 +453,30 @@ public class Exercise2 extends Setup {
         switchTo().alert().accept();
         result.shouldHave(text("You entered: Hello World!"));
     }
-    @Test(groups = "Website", priority = 25)
+
+    @Test(groups = "Website", priority = 27)
+    public void JavaScript_OnloadEventError() {
+        /**
+         * does not work in Firefox
+         */
+
+        open("http://the-internet.herokuapp.com/");
+        $(By.xpath("//*[@id=\"content\"]/ul/li[26]/a")).click();
+        sleep(2000);
+
+        List<String> webDriverLogs = getWebDriverLogs(BROWSER, Level.SEVERE);
+
+        String logEntry = webDriverLogs.get(1);
+        System.out.println(logEntry);
+        Assert.assertTrue(logEntry, logEntry.contains("Uncaught TypeError: Cannot read property 'xyz' of undefined"));
+
+        /**
+         * Waiting for fix getJavaScriptError
+         * issue https://github.com/codeborne/selenide/issues/540
+         */
+    }
+
+    @Test(groups = "Website", priority = 28)
     public void KeyPresses() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[27]/a")).click();
@@ -478,7 +491,8 @@ public class Exercise2 extends Setup {
         result.shouldHave(text("You entered: A"));
         sleep(1000);
     }
-    @Test(groups = "Website", priority = 26)
+
+    @Test(groups = "Website", priority = 29)
     public void MultipleWindows() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[29]/a")).click();
@@ -488,7 +502,14 @@ public class Exercise2 extends Setup {
         switchTo().window("The Internet");
         link.shouldBe(visible);
     }
+
 }
+
+
+/**
+ * Work in progress Drag and Drop, Geolocation, JavaScript onload event error, Large & Deep DOM, Notification Messages,
+ * Redirect Link, Secure File Download, Shifting Content, Slow Resources, Sortable Data Tables, Status Codes, Typos,
+ */
 
 
 
