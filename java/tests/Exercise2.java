@@ -360,6 +360,7 @@ public class Exercise2 extends Setup {
         Assert.assertNotEquals(after_text, before_text);
         System.out.println(before_text);
         System.out.println(after_text);
+        switchTo().window("The Internet").close();
     }
 
     @Test(groups = "Website", priority = 22)
