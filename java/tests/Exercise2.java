@@ -1,9 +1,13 @@
 package tests;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
 import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.testng.annotations.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
@@ -359,6 +363,35 @@ public class Exercise2 extends Setup {
     }
 
     @Test(groups = "Website", priority = 22)
+    public void Geolocation() {
+        FirefoxProfile profile = createFirefoxProfileWithEnabledGeolocation();
+        WebDriver driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
+        driver.manage().window().maximize();
+        try {
+            WebDriverRunner.setWebDriver(driver);
+            open("https://the-internet.herokuapp.com/");
+            $(By.xpath("//*[@id=\"content\"]/ul/li[20]/a")).click();
+            $(".example > button:nth-child(3)").click();
+            SelenideElement latitude = $("#lat-value");
+            SelenideElement longitude = $("#long-value");
+            latitude.waitUntil(visible,10000);
+            System.out.println("latitude :"+latitude);
+            longitude.waitUntil(visible,10000);
+            System.out.println("longitude :"+longitude);
+        }
+        finally {
+            WebDriverRunner.closeWebDriver();
+        }
+    }
+
+    private FirefoxProfile createFirefoxProfileWithEnabledGeolocation() {
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setPreference("geo.enabled", true);
+        profile.setPreference("permissions.default.geo", 1);
+        return profile;
+    }
+
+    @Test(groups = "Website", priority = 23)
     public void HorizontalSlider() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[21]/a")).click();
@@ -371,7 +404,7 @@ public class Exercise2 extends Setup {
         range.shouldHave(text("1"));
     }
 
-    @Test(groups = "Website", priority = 23)
+    @Test(groups = "Website", priority = 24)
     public void Hovers() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[22]/a")).click();
@@ -389,7 +422,7 @@ public class Exercise2 extends Setup {
         user3text.waitUntil(appear, 5000).shouldHave(text("name: user3"));
     }
 
-    @Test(groups = "Website", priority = 24)
+    @Test(groups = "Website", priority = 25)
     public void InfiniteScroll() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[23]/a")).click();
@@ -408,7 +441,7 @@ public class Exercise2 extends Setup {
         sleep(1000);
     }
 
-    @Test(groups = "Website", priority = 25)
+    @Test(groups = "Website", priority = 26)
     public void JQueryUIMenu() throws FileNotFoundException {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[24]/a")).click();
@@ -427,7 +460,7 @@ public class Exercise2 extends Setup {
         excel.waitUntil(visible, 5000).download();
     }
 
-    @Test(groups = "Website", priority = 26)
+    @Test(groups = "Website", priority = 27)
     public void JavaScriptAlerts() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[25]/a")).click();
@@ -454,7 +487,7 @@ public class Exercise2 extends Setup {
         result.shouldHave(text("You entered: Hello World!"));
     }
 
-    @Test(groups = "Website", priority = 27)
+    @Test(groups = "Website", priority = 28)
     public void JavaScript_OnloadEventError() {
         /**
          * does not work in Firefox
@@ -476,7 +509,7 @@ public class Exercise2 extends Setup {
          */
     }
 
-    @Test(groups = "Website", priority = 28)
+    @Test(groups = "Website", priority = 29)
     public void KeyPresses() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[27]/a")).click();
@@ -492,7 +525,7 @@ public class Exercise2 extends Setup {
         sleep(1000);
     }
 
-    @Test(groups = "Website", priority = 29)
+    @Test(groups = "Website", priority = 30)
     public void MultipleWindows() {
         open("http://the-internet.herokuapp.com/");
         $(By.xpath("//*[@id=\"content\"]/ul/li[29]/a")).click();
@@ -507,7 +540,7 @@ public class Exercise2 extends Setup {
 
 
 /**
- * Work in progress Drag and Drop, Geolocation, JavaScript onload event error, Large & Deep DOM, Notification Messages,
+ * Work in progress Drag and Drop Html5, JavaScript onload event error, Large & Deep DOM, Notification Messages,
  * Redirect Link, Secure File Download, Shifting Content, Slow Resources, Sortable Data Tables, Status Codes, Typos,
  */
 
