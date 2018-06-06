@@ -1,6 +1,14 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Website_Test">
     <test name="All in one test" preserve-order="true">
+        <parameter name="name" value="TEST"/>
+        <parameter name="surname" value="AUTOMATYCZNY"/>
+        <parameter name="tel" value="9999999999"/>
+        <parameter name="user" value="TESTAUTOMATYCZNY12345"/>
+        <parameter name="mail" value="TESTAUTOMATYCZNY12345@TESTAUTOMATYCZNY.com"/>
+        <parameter name="pass" value="TEST1234"/>
+        <parameter name="cpas" value="TEST1234"/>
+        <parameter name="mails" value="qwerty@qwerty.com,qwerty1@qwerty1.com,qwerty2@qwerty2.com"/>
         <groups>
             <run>
                 <include name="Website"/>
@@ -10,6 +18,7 @@
             <class name="tests.Setup"/>
             <class name="tests.Exercise1"/>
             <class name="tests.Exercise2"/>
+            <class name="tests.Exercise3"/>
         </classes>
     </test>
 </suite>
