@@ -15,5 +15,12 @@ public class DemoQAPage {
         signupBtn.click();
         return  new SignUpPage();
     }
+    public DraggablePage goToDraggablePage(){
+        draggableBtn.click();
+        return  new DraggablePage();
+    }
+
     SelenideElement signupBtn = $("#menu-item-374");
+    SelenideElement draggableBtn = $("#menu-item-140 > a");
 }
+

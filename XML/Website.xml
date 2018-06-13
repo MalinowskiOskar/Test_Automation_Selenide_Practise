@@ -1,14 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Website_Test">
     <test name="All in one test" preserve-order="true">
-        <parameter name="name" value="TEST"/>
-        <parameter name="surname" value="AUTOMATYCZNY"/>
-        <parameter name="tel" value="9999999999"/>
-        <parameter name="user" value="TESTAUTOMATYCZNY12345"/>
-        <parameter name="mail" value="TESTAUTOMATYCZNY12345@TESTAUTOMATYCZNY.com"/>
-        <parameter name="pass" value="TEST1234"/>
-        <parameter name="cpas" value="TEST1234"/>
-        <parameter name="mails" value="qwerty@qwerty.com,qwerty1@qwerty1.com,qwerty2@qwerty2.com"/>
+
         <groups>
             <run>
                 <include name="Website"/>
@@ -19,6 +12,32 @@
             <class name="tests.Exercise1"/>
             <class name="tests.Exercise2"/>
             <class name="tests.Exercise3"/>
+            <class name="tests.Exercise4"/>
+            <class name="tests.Exercise5"/>
         </classes>
     </test>
+    <!--For Exercise 3-->
+    <parameter name="name" value="TEST"/>
+    <parameter name="surname" value="AUTOMATYCZNY"/>
+    <parameter name="tel" value="9999999999"/>
+    <parameter name="user" value="TESTAUTOMATYCZNY12345"/>
+    <parameter name="mail" value="TESTAUTOMATYCZNY12345@TESTAUTOMATYCZNY.com"/>
+    <parameter name="pass" value="TEST1234"/>
+    <parameter name="cpas" value="TEST1234"/>
+    <parameter name="mails" value="qwerty@qwerty.com,qwerty1@qwerty1.com,qwerty2@qwerty2.com"/>
+
+    <!--For Exercise 4-->
+    <parameter name="CorrectName" value="TEST"/>
+    <parameter name="CorrectSurname" value="AUTOMATYCZNY"/>
+    <parameter name="InvalidPhone" value="123"/>
+    <parameter name="CorrectPhone" value="1234567890"/>
+    <parameter name="UsedUser" value="test@test.com"/>
+    <parameter name="CorrectUser" value="TESTAUTOMATYCZNY123456"/>
+    <parameter name="InvalidMail" value="TESTMAIL"/>
+    <parameter name="CorrectMail" value="TESTAUTOMATYCZNY123456@TESTAUTOMATYCZNY.com"/>
+    <parameter name="UsedMail" value="test@test.com"/>
+    <parameter name="ShortPass" value="TEST"/>
+    <parameter name="CorrectPass" value="TEST1234"/>
+    <parameter name="InvalidCpass" value="TESTTEST"/>
+    <parameter name="CorrectCpass" value="TEST1234"/>
 </suite>
